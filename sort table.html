@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sortable Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Light gray background color for the entire page */
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            background-color: #f7d6e0; /* Pastel pink background color for cells */
+            color: #6b2737; /* Darker text color for contrast */
+        }
+        th {
+            background-color: #8f3e97; /* Purple background color for header */
+            color: #fff; /* White text color for contrast */
+            font-weight: bold;
+            cursor: pointer;
+            padding: 15px 0; /* Adjusted padding for header */
+            text-align: center; /* Center align text in header */
+            border-bottom: 2px solid #6b2a6d; /* Darker border bottom for header */
+        }
+        th:hover {
+            background-color: #6b2a6d; /* Darker hover color for header */
+        }
+        tr:nth-child(even) {
+            background-color: #f7d6e0; /* Alternating pastel pink rows */
+        }
+        tr:hover {
+            background-color: #e9c7d8; /* Lighter hover color for rows */
+            transition: background-color 0.3s; /* Smooth transition effect */
+        }
+        .highlighted {
+            background-color: #ffc107;
+            transition: background-color 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align: center; padding: 15px 0; margin: 0; background-color: #f7d6e0; color: #6b2737; border-bottom: 2px solid #d6335c;">Sortable Table</h2>
+        <table id="modernTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Person Name</th>
+                    <th onclick="sortTable(1)">Age</th>
+                    <th onclick="sortTable(2)">Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>John Doe</td>
+                    <td>30</td>
+                    <td>USA</td>
+                </tr>
+                <tr>
+                    <td>Alice Smith</td>
+                    <td>25</td>
+                    <td>Canada</td>
+                </tr>
+                <tr>
+                    <td>Maria Garcia</td>
+                    <td>35</td>
+                    <td>Spain</td>
+                </tr>
+                <!-- Additional rows -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function sortTable(columnIndex) {
+            const table = document.getElementById('modernTable');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.rows);
+
+            rows.sort((rowA, rowB) => {
+                const cellA = rowA.cells[columnIndex].textContent.trim();
+                const cellB = rowB.cells[columnIndex].textContent.trim();
+
+                if (columnIndex === 1) {
+                    return parseInt(cellA, 10) - parseInt(cellB, 10);
+                } else {
+                    return cellA.localeCompare(cellB);
+                }
+            });
+
+            while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            rows.forEach((row, index) => {
+                row.style.backgroundColor = index % 2 === 0 ? '#f7d6e0' : '#f7d6e0';
+                if (index === 0) {
+                    row.classList.add('highlighted');
+                    setTimeout(() => {
+                        row.classList.remove('highlighted');
+                    }, 1000);
+                }
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
